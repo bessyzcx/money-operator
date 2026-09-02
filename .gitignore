@@ -1,0 +1,39 @@
+# Keep personal financial data out of the skill repository.
+记账配置_最新.json
+财务状态_最新.json
+财务复盘历史.csv
+
+# Statements and user-provided data
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.numbers
+*.pdf
+*.html
+*.htm
+*.png
+*.jpg
+*.jpeg
+*.heic
+*.zip
+*.tar.gz
+
+# Generated workspaces and local artifacts
+build/
+dist/
+outputs/
+artifacts/
+site/
+.openai/
+
+# Local and OS metadata
+.DS_Store
+__MACOSX/
+._*
+*.swp
+*.tmp
+*.log
+__pycache__/
+*.pyc
+.venv/
