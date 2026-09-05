@@ -1,253 +1,61 @@
 ---
-name: personal-bimonthly-bookkeeping
-description: Set up a new user's account and transaction-source profile, then run an auditable two-month bookkeeping and financial operating-review cycle from wallet, marketplace, bank, card, spreadsheet, PDF, and screenshot data. Use for 首次启动、账户与账单来源盘点、整理账单、去重分类、预算审核、生成双月账本，或更新资产负债、目标与下一周期行动；使用私有确认页和决策报告，终稿交付 Excel 与在线报告链接。
+name: money-operator
+description: Reconcile messy personal or household statements from any date range or life event and produce traceable ledgers and spending insights. Use for 首次启动、任意时期或阶段账单整理、去重分类、收支核对、消费洞察及可选资产负债复盘。Adapt to the current AI's capabilities; no specific AI vendor or monthly cadence is required.
 ---
 
-# Personal Bimonthly Bookkeeping
+# Money Operator
 
-Run an auditable two-month cycle that ends with a financial decision, not only a categorized ledger.
+Turn messy records into a ledger the user can trace and insights they can act on. Support a trip, a move, several weeks, irregular months, a year, or a historical backlog.
 
-## Choose the operating mode
+## First launch
 
-Before requesting statements, look in the active workspace for `记账配置_最新.json`.
+Read `references/runtime.md` and `references/period-scope.md` before promising outputs. Confirm people, dates or event, currency, and the question to answer. Accept existing uploads and infer a proposed scope from them. No provider, plugin, or website host is mandatory.
 
-- If it is missing, unreadable, belongs to another person, or the user says this is their first use, read `references/first-run.md` and complete first launch before Phase 1.
-- If it exists, summarize the saved scope and source list in plain language. Ask only what changed, then update the workspace-owned profile.
-- If the user only wants installation or orientation, point them to `用户工具包.md`; do not begin a bookkeeping run.
+Read `references/first-run.md` and use `templates/first-run-profile.md` when no user-owned profile is available in the workspace or attachments. Returning users only confirm changes. Never reuse another person's accounts, budgets, merchant rules, or values. If the user only wants setup, finish with a personalized preparation list; otherwise continue with supplied records.
 
-Never copy a prior user's source list, account names, budget, merchant rules, or financial values into a new user's profile.
+## Reconcile records
 
-## Operating principles
+1. Generate `templates/source-checklist.md` from the actual scope. Record requested dates and each source's coverage separately; missing records are not zero activity.
+2. Inventory attachments by filename, source, format, dates, and processing status. Keep originals unchanged. Process available records even when others are missing; label results `已提供资料范围内` and list gaps. Do not claim complete household coverage without evidence.
+3. Prefer XLSX/CSV, then supported PDF reading or OCR. If Numbers is unavailable, request an XLSX/CSV export. `scripts/ocr_images.swift` is an optional macOS helper; native image reading or another available OCR tool may substitute. Retain filenames and uncertainty on extracted rows. Check dates and amounts.
+4. Read `references/deduplication.md`. Link order, wallet, and bank records, preserving duplicate exclusions. Do not ask users to delete transfers, repayments, salary, or refunds before reconciliation.
+5. Read `references/classification.md`. Apply user-confirmed rules and categories. Without a budget, report actuals without an invented over-budget judgment.
+6. Show source counts, date coverage, duplicate candidates, and proposed treatment. Use `templates/review-response.md` in chat, a file, or an available private surface. Ask only necessary questions about material ambiguity, transfers, unusual amounts, and unknown purchases.
+7. Identify included receipts/refunds and distinguish AA repayments, refunds, deposits, income, investments, and transfers. Preserve unmatched and out-of-period links without silently changing the scope.
+8. Apply answers and recompute totals using an actual calculation tool. If none is available, provide preparation/classification assistance and a continuation record; do not claim numerically verified results.
+9. Read `references/outputs.md` and deliver the ledger, audit evidence, and insights in supported formats. Separate coverage gaps from unresolved decisions. Use `最终版` only for a declared scope with all actionable decisions resolved, prominently retaining any incomplete coverage label.
 
-- Finish transaction correctness before drawing financial conclusions.
-- Keep bookkeeping completion and financial-review completion as separate states. Missing asset data must not block a reconciled bookkeeping final.
-- Separate `事实`、`假设`、`用户目标`、`建议` in every financial review.
-- Use the user's goals, time horizon, income risk, and existing concentrations. Never impose a universal reserve size, withdrawal rate, or asset-allocation ratio.
-- Separate housing and other hard commitments from adjustable consumption in comparisons, rankings, and behavior analysis. Treat them as the cash-flow floor unless the user explicitly requests another scope.
-- Make the final dashboard explain why the result occurred and which decision could change it; do not stop at category totals and descriptive charts.
-- Prefer three verified actions over a long advice list. Every action must name an amount or rule, source and destination, trigger or due date, stop condition, and next review date.
-- Preserve source evidence and metric definitions so the next two-month cycle can explain what changed.
+## Ledger contract
 
-Close each cycle only after the outputs can answer:
+Keep these fields in the ledger or equivalent tables:
 
-1. Where did money go during the period?
-2. Did net worth and financial optionality improve or weaken, and why?
-3. Which risk or goal now deserves the next unit of money, time, or attention?
-4. What are the next two months' one to three actions?
-5. Were the prior actions completed, and did the intended metric change?
+- 行ID、日期、来源、原始文件、商户、金额、币种、备注、原始交易类型、支付方式、订单号
+- 分类初稿、最终分类、处理建议、最终处理、待确认、确认编号、去重说明、决定依据、关联证据
 
-## Required workflow
+Keep stable row/question IDs. Dates use YYYY-MM-DD; positive amounts mean expense, negative amounts mean receipt/refund. Preserve source signs separately when needed. Unknowns remain unknown. Never sum currencies without a documented conversion basis.
 
-### Phase 1: close the books
+Spending normally excludes internal transfers, card repayments, salary, investment movements, and confirmed separate deposits; retain them in cash-flow/audit records. Refunds and AA receipts may offset spending. Clarify unclear material transfers. Split mortgage principal from interest only with evidence: principal changes cash and debt; interest is an expense. A full-payment cash-outflow view must disclose its basis.
 
-1. Determine the exact period, normally two full calendar months.
-2. Load the confirmed source profile from `记账配置_最新.json`. Read `templates/source-checklist.md`, generate a checklist from that profile, and show it on the private review site. Do not add the example sources unless the user confirmed them.
-3. Pause the formal full bookkeeping workflow if a required source in the user's profile is neither provided nor explicitly marked as having no transactions. Allow partial processing only when the user explicitly requests it, and label every output `阶段性处理`.
-4. Inventory every attachment with original filename, format, period, and processing status.
-5. Convert Numbers files, OCR screenshots, parse structured files, and normalize all sources.
-6. Produce an internal unified ledger before classification. Report source counts, date range, and duplicate candidates on the deployed review site.
-7. Read and apply `references/deduplication.md`.
-8. Read and apply `references/classification.md`.
-9. Update and privately deploy a focused confirmation page. Ask only about the cases specified in the classification reference.
-10. Identify every included receipt/refund before calculating final net amounts.
-11. Reconcile all confirmations. Generate the final workbook and privately deploy the decision-oriented report site using `references/outputs.md`.
-12. Update reusable merchant rules and the bookkeeping execution record, including the deployed report URL.
+## Spending insights
 
-### Phase 2: run the financial operating review
+After reconciliation read `references/consumption-behavior.md`. Quantify the largest supported drivers, recurring versus event spending, refund effects, and decisions dominating the amount. Separate housing and hard commitments from adjustable spending. Distinguish facts, inferences, and hypotheses; never invent regret or purchase value.
 
-13. After the ledger is reconciled, read `references/financial-review.md`.
-14. Look for the latest user-owned `财务状态_最新.json`, prior final workbook, or prior asset snapshot in the active workspace or user-approved destination. Never store personal values in the skill folder or deployable site source.
-15. Read `templates/financial-profile.md`. On the same private review site, ask only for missing or changed items:
-    - Current asset and liability balances with snapshot dates
-    - Income, job stability, dependants, and near-term cash commitments
-    - Goals that must not depend on market performance
-    - Target reserve rule, asset roles, and investment automation rule
-    - Changes since the previous review
-16. Treat financial-review inputs as non-blocking for the bookkeeping final. If balances are missing, complete Phase 1 and label the financial section `待补资产快照` or `部分估算`; do not carry old balances forward as current facts.
-17. Update three connected views:
-    - Income and spending view from the reconciled ledger
-    - Cash-flow view including debt service, transfers, and investment flows
-    - Point-in-time asset and liability snapshot
-18. Calculate only metrics supported by current data. Build an internal JSON input and run `scripts/calculate_financial_metrics.py`; preserve its input, output, and warnings as local audit artifacts. Show formulas, included accounts, snapshot dates, and confidence labels.
-19. Compare with the previous confirmed snapshot and explain net-worth changes as operating surplus, debt-principal change, market/valuation change, other capital change, or scope adjustment.
-20. Diagnose the highest-leverage gap across resilience, solvency, concentration, goal funding, and earning capacity.
-21. Read `references/consumption-behavior.md`. Build the diagnosis-first consumption views: explain the non-housing monthly average as an additive composition, identify monthly drivers, separate the suggested living floor from adjustable and periodic/project spending, analyze decision-oriented transaction bands, and rank categories by amount and suggested controllability. Calculate a clearly labeled consumption-deliberation threshold only when supported.
-22. Generate no more than three ranked actions for the next two months. Convert continuous-investing, consumption-friction, and asset-role principles into automation only after the user's safety reserve and near-term goals are protected.
-23. Add the financial review, goal status, prior-action review, and new action tracker to the final workbook and the private report site. Update `财务状态_最新.json` and append the period to `财务复盘历史.csv` after user confirmation.
+Apply `references/period-scope.md` to granularity and denominators. Trips, partial months, and missing-source records are not normal monthly baselines. Budget comparisons need a matching confirmed budget. Without comparable history describe the supplied period rather than a trend. End with at most three actions timed to the user's situation, not a fixed two-month cycle.
 
-## Input handling
+## Optional financial review
 
-### Preferred transaction formats
+Missing assets/income never block spending insights. When requested, read `references/financial-review.md` and `templates/financial-profile.md`. Ask only for missing or changed dated balances, liabilities, income, goals, and commitments.
 
-- WeChat, Alipay, Meituan, JD: `.xlsx` or `.csv`; `.numbers` is acceptable when Numbers App is available.
-- ICBC credit card: original `.csv`.
-- Banks: original `.xlsx`, `.csv`, or text-readable `.pdf`.
-- UnionPay and image-only statements: clear, continuous screenshots showing date, merchant, amount, and account.
+Run `scripts/calculate_financial_metrics.py` when Python is available; otherwise use its documented formulas in an actual calculation tool, retaining inputs, formulas, missing values, and warnings. Never claim the script ran if it did not. Its monthly inputs require independently supported monthly costs/income: do not pass an arbitrary-period total as monthly spending.
 
-Never ask the user to pre-delete repayments, transfers, refunds, salary, or duplicates. They are reconciliation evidence.
+Keep spending, cash flow, and point-in-time assets distinct. Explain net-worth changes only between comparable dated snapshots. Show bookkeeping, coverage, and financial-review status separately. Save user-owned state after confirmation, or return a portable continuation record if persistence is unavailable.
 
-### Numbers conversion
+## Delivery, privacy, and verification
 
-On macOS, export each Numbers document separately through Numbers App to `.xlsx`.
+Core outputs are a traceable ledger and supported insights. Excel is preferred when available; CSV/copyable tables and a text report are valid fallbacks. Read `references/site-experience.md` only for optional HTML/hosting. Missing hosting never blocks bookkeeping.
 
-- Export one document at a time. Parallel GUI exports can export the wrong front document.
-- Verify the exported workbook title and first data rows before parsing.
-- Keep converted workbooks in a dedicated build directory; do not overwrite originals.
-- If Numbers App is unavailable, ask the user to export to `.xlsx` or `.csv` rather than attempting to decode `.iwa` files ad hoc.
+Save personal profiles, merchant rules, decisions, and balances outside this toolkit. Without filesystem persistence, return a continuation file/text for the user to save. Never claim cross-chat memory without evidence. Do not request passwords, verification codes, or full account numbers. Publishing needs approval of destination and access; an unlisted link is not proof of private access.
 
-### OCR
+Before delivery reconcile source counts, included/excluded rows, duplicate removals, expenses, refunds, and net totals. Check boundaries, gaps, currencies, and pending decisions. Verify formulas and files with available tools, disclosing unavailable verification. Visual reports must match the ledger. Never invent downloadable files, deployed links, missing data, or successful tool runs.
 
-Use `scripts/ocr_images.swift` when Swift and Vision are available.
-
-- Store raw OCR JSON as an audit artifact.
-- Parse dates only from date-like lines with contextual markers such as weekdays. Do not treat amounts such as `79.11` as dates.
-- Retain the screenshot filename on every OCR-derived row.
-- Mark OCR-derived records for review when merchant or amount is uncertain.
-- Cross-check OCR records against wallet and bank sources before including them.
-
-## Normalized transaction schema
-
-Every row must contain:
-
-| Field | Meaning |
-|---|---|
-| 行ID | Stable local identifier preserved across rebuilds |
-| 日期 | `YYYY-MM-DD` |
-| 来源 | Recognized source label; allow new banks and payment channels |
-| 商户 | Complete original merchant or best OCR reconstruction |
-| 金额 | Positive = expense; negative = receipt/refund |
-| 备注 | Original product, memo, or transaction description |
-| 原始交易类型 | Original source transaction type |
-| 支付方式 | Card, balance, wallet, or payment channel |
-| 订单号 | Source order or transaction ID |
-| 分类初稿 | Initial category |
-| 最终分类 | Confirmed or rule-derived final category |
-| 处理建议 | 建议纳入 / 建议排除 / 待确认后纳入 |
-| 最终处理 | 纳入 / 排除 / 重复排除 / 待确认 |
-| 待确认 | Specific reason requiring user input |
-| 确认编号 | Stable question ID when user confirmation is required |
-| 去重说明 | Kept source or excluded duplicate explanation |
-| 决定依据 | Rule, evidence, or user answer supporting final treatment |
-| 关联证据 | Product/order detail merged from linked or excluded source rows |
-
-For the financial review, add separate derived fields when data supports them:
-
-| Field | Meaning |
-|---|---|
-| 财务属性 | 消费费用 / 债务本金 / 利息税费 / 投资 / 内部转账 / 收入 / 其他资本变动 |
-| 必要性 | 必要 / 可调整 / 不适用 / 待确认 |
-| 是否一次性 | 是 / 否 |
-| 口径说明 | Why the row differs between budget, cash-flow, and net-worth views |
-| 决策金额区间 | Decision-oriented amount band based on positive original consumption amount |
-| 决策层级 | 日常 / 提醒 / 慎重 / 小项目; derived from the user's confirmed thresholds |
-
-Do not overwrite the user's consumption category with these accounting attributes.
-
-## Accounting boundaries
-
-Exclude from spending by default:
-
-- Internal account transfers
-- Credit-card repayments
-- Salary, wealth-management movements, fund subscriptions, provident-fund account flows
-- Deposit payments or returns when the user confirms they belong to a separate receivables ledger
-- Records explicitly marked `不计收支`
-
-Do not silently exclude:
-
-- Refunds that should offset a spending category
-- AA repayments
-- Large personal transfers with unclear purpose
-- Installment charges whose accounting period is unclear
-
-For a mortgage payment, the budget view may show the full cash outflow as housing cost. The net-worth bridge must split principal from interest when evidence permits: principal reduces cash and debt; interest is an expense. If the split is unavailable, label the bridge incomplete instead of inventing it.
-
-## Confirmation checkpoints
-
-### Checkpoint A: source completeness
-
-Do not begin the formal full bookkeeping run until every required transaction source in the user's confirmed profile is resolved. A generic platform list is not evidence of this user's sources. Optional financial-review inputs never block Phase 1.
-
-### Checkpoint B: initial ledger and duplicates
-
-Show total rows, source counts, date range, and duplicate candidates. Wait for confirmation before treating the ledger as final.
-
-### Checkpoint C: focused classification questions
-
-Ask only about:
-
-- Personal transfers above the user's confirmed attention threshold, or materially large relative to this period when no threshold exists
-- Transactions abnormally large for that user, merchant, or category
-- First-seen unmatched merchants above the user's threshold, or material to the period when no threshold exists
-- Platform merchants whose purchased item cannot be determined
-
-### Checkpoint D: receipts and netting
-
-List all included negative amounts and have the user label each as AA repayment, refund, deposit return, true income, wealth-management movement, or other.
-
-### Checkpoint E: financial profile delta
-
-After Phase 1 is resolved, deploy a short private form containing only missing or changed financial facts and goals. Allow `本期不更新资产` as a valid answer. Clearly state which analyses will remain unavailable.
-
-## Draft and final output policy
-
-- Use `sites:sites-building` and `sites:sites-hosting` for user-facing review pages and the final report. Read `references/site-experience.md` before site work.
-- Treat the privately deployed site as the primary page deliverable. Produce an offline HTML export only when explicitly requested.
-- Do not create a draft workbook unless explicitly requested or the site cannot preserve a required audit interaction.
-- Make every confirmation view task-oriented: exact remaining count, stable IDs, evidence, suggested answer, and copyable response.
-- After each user response, update the ledger first, rebuild only unresolved items, and deploy a new version to the same private site.
-- Do not label an artifact final while actionable bookkeeping items remain.
-- Phase 1 final deliverables remain `记账_MM-MM月_最终版.xlsx` and the private deployed URL for `预算审核报告_MM-MM月`.
-- Enhance those same deliverables with asset, goal, and action sections when supported; do not create a disconnected advice report.
-- Show `记账完成度` and `财务复盘完成度` separately.
-- Reuse one Sites project for the approved scope, normally one calendar year. Reuse an existing opaque `project_id`.
-- Deploy privately by default. Never publish personal financial data publicly without explicit approval of the resolved access level.
-- Keep merchant rules, execution record, financial state, and history as local supporting audit artifacts, never inside the skill package or deployable site source.
-
-## Quality checks
-
-Before delivery:
-
-- Confirm every source file is represented and the requested period is enforced.
-- Reconcile duplicate exclusions, refunds, and bank/card totals where available.
-- Scan for malformed OCR dates and impossible amounts.
-- Verify formulas and render every workbook sheet at least once.
-- Reconcile every displayed value and chart to the final summary; test routes, links, mobile width, labels, units, legends, copy controls, and keyboard labels.
-- Verify every website currency surface—KPI, axis, tooltip, table, narrative, export, and expanded chart—renders CNY/RMB (`¥` or `CNY`), never a renderer's default USD.
-- Run the production site build, deploy the exact validated source privately, and wait for deployment success.
-- Verify facts, assumptions, goals, and recommendations are visibly separated.
-- Verify every balance shows snapshot date, source, and confirmed/estimated/old/missing status.
-- Verify future loan interest is not included in current liabilities.
-- Verify debt principal, interest, consumption, repayment, and internal transfers are not double-counted.
-- Verify two-month anomalies and one-off spending are not blindly annualized.
-- Verify missing current balances do not appear as precise current metrics.
-- Verify prior-period comparison uses the same scope or explains the scope change.
-- Verify final actions are at most three, funded, measurable, and reviewable next cycle.
-- Verify transaction-band charts reconcile to positive original consumption amount and disclose whether housing, refunds, transfers, and investment flows are excluded.
-- Verify no broad band hides a material medium-value spending cluster; split `300–1000` at least into decision-useful sub-bands when that range is material.
-- Verify consumption thresholds are dated recommendations derived from explicit inputs, not claims that the user can afford every purchase below them.
-- Archive or clearly supersede stale drafts.
-
-## Privacy
-
-- Never include raw statements, account numbers, personal goals, or financial values in the skill package.
-- Keep original inputs unchanged.
-- Store generated artifacts only in the active workspace or a user-approved destination.
-- Mask account numbers in summaries unless the final workbook requires an already-masked identifier.
-- Keep every deployed bookkeeping site private by default and publish only derived, masked data needed for review or analysis. Never upload raw statement files.
-- Keep the deployable site in the dedicated directory defined by `references/site-experience.md`; never initialize or commit a Sites project from the bookkeeping workspace root.
-
-## Supporting resources
-
-- Read `references/first-run.md` when no valid user profile exists, ownership or household scope changed, or the user asks to reconfigure sources.
-- Read `references/deduplication.md` before matching duplicate transactions.
-- Read `references/classification.md` before assigning categories.
-- Read `references/outputs.md` before creating deliverables.
-- Read `references/site-experience.md` before building or deploying a review or report site.
-- Read `references/financial-review.md` before updating balances, goals, metrics, or actions.
-- Read `references/consumption-behavior.md` before setting purchase thresholds, designing amount-band charts, or recommending spending-friction habits.
-- Run `scripts/calculate_financial_metrics.py --example` to inspect the anonymous input contract, then use the script for supported metrics. Never replace a missing inclusion/deduction flag with an assumed `false`.
-- Use `templates/source-checklist.md` at the start of every new period.
-- Use `templates/first-run-profile.md` to guide a new user through setup without exposing the internal JSON schema.
-- Use `templates/review-response.md` for transaction corrections.
-- Use `templates/financial-profile.md` for the first financial review and later delta checks.
+For user setup see `用户工具包.md`. `START_HERE.md` contains a standalone chat workflow when the folder cannot be loaded.

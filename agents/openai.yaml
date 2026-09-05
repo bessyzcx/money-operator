@@ -1,4 +1,4 @@
 interface:
-  display_name: "双月记账与财务经营复盘"
-  short_description: "先配置你的账户来源，再完成双月记账、财务诊断与行动闭环"
-  default_prompt: "使用 $personal-bimonthly-bookkeeping 开始记账；如果是首次使用，请先引导我完成账户和账单来源配置。"
+  display_name: "Money Operator 账单整理与洞察"
+  short_description: "适配当前 AI，整理任意时期或阶段的混乱账单，核对收支并提供消费洞察"
+  default_prompt: "使用 $money-operator 整理我的账单，先确认日期或事件范围、资料来源和当前工具能力，再生成账本与洞察。"

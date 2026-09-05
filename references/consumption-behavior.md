@@ -1,5 +1,7 @@
 # Consumption Behavior and Decision Thresholds
 
+Apply `period-scope.md` first. Monthly averages, monthly drivers, budgets and recurring baselines below apply only when source coverage and purpose support them. Otherwise use selected-period totals and event or daily/weekly views; do not manufacture monthly inputs. Use `runtime.md` for calculation, persistence and output fallbacks; no hosted site is required.
+
 Use this reference after the ledger is reconciled and before recommending spending controls. The goal is to add friction only where it changes decisions, not to make every small purchase cognitively expensive.
 
 ## 1. Use the correct evidence population

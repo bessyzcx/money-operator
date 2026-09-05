@@ -61,10 +61,10 @@ Use only a user-confirmed budget file, explicitly stated target, or prior confir
 
 ## Budget normalization
 
-Calculate budget pressure against a period-adjusted budget and disclose the basis:
+Calculate budget pressure only against a matching user-confirmed budget and disclose the basis. For partial/event scopes, obtain the user's intended allocation before applying any proportional rule below; otherwise show actuals without utilization. Missing sources never establish full budget coverage.
 
-1. Count covered calendar months. For partial months, use the actual covered days divided by the days in that month.
-2. Monthly budget: `user-confirmed monthly budget × covered months`.
+1. Count fully covered calendar months. Only if daily proration is confirmed, use covered days divided by calendar days for a partial month; never prorate fixed bills or an event budget automatically.
+2. Monthly budget: `user-confirmed monthly budget × fully covered calendar months` only for matching full-month scope. For partial dates, events, missing sources or disjoint segments, apply `period-scope.md`; do not automatically prorate or count every touched month as a full month.
 3. Quarterly budget: `quarterly budget × covered months ÷ 3`.
 4. Annual budget: calculate each calendar year's covered share as `annual budget × covered months in that year ÷ 12`, then sum the shares.
 5. Observation or Separate: show `无预设预算`; do not calculate a utilization percentage or mark it over budget.

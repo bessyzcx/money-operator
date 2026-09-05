@@ -1,10 +1,10 @@
 # First launch
 
-Use this flow before processing any statements when the workspace has no valid user-owned profile.
+Use this flow when no valid user-owned profile is available in the workspace or attachments. Apply runtime.md and period-scope.md first.
 
 ## Outcome
 
-Create `记账配置_最新.json` in the active workspace or a user-approved private destination. It must describe whose money is in scope, the recurring transaction sources, how they connect, and which sources are required for a complete period. Do not store balances, transaction data, full account numbers, passwords, identity numbers, or statement passwords in this file.
+Create `记账配置_最新.json` in the active workspace or a user-approved private destination when files can be saved; otherwise return a copyable continuation record for the user to save and resupply. It must describe whose money is in scope, the recurring transaction sources, how they connect, and which sources are required for a complete period. Do not store balances, transaction data, full account numbers, passwords, identity numbers, or statement passwords in this file.
 
 ## Conversation design
 
@@ -29,7 +29,7 @@ For every transaction source record:
 - friendly masked name and source type
 - included person or household role
 - normal export format, or `unknown`
-- whether it is required every period
+- whether it is relevant to the current requested scope
 - likely payment relationship to another source
 - active, newly added, or retired status
 
@@ -41,11 +41,12 @@ The exact JSON shape may evolve, but preserve these top-level meanings:
 
 ```json
 {
-  "profile_version": 1,
+  "profile_version": 2,
   "owner_label": "本人",
   "household_scope": ["本人"],
   "base_currency": "CNY",
-  "default_cycle": "two_full_calendar_months",
+  "requested_scope": {"start_date": null, "end_date": null, "event": null, "coverage_segments": [], "missing_segments": []},
+  "review_cadence": null,
   "transaction_sources": [],
   "cross_check_sources": [],
   "financial_snapshot_sources": [],
@@ -59,7 +60,7 @@ The exact JSON shape may evolve, but preserve these top-level meanings:
   },
   "privacy": {
     "mask_account_identifiers": true,
-    "private_site_only": true
+    "publishing_requires_approval": true
   },
   "confirmed_at": "YYYY-MM-DD",
   "needs_review": []
@@ -73,7 +74,7 @@ Do not invent missing values. Use `unknown` or add the item to `needs_review`.
 Show a short summary before saving:
 
 - Who is included
-- Which sources must be provided each period
+- Which sources and dates are relevant to this run
 - Which sources are cross-check only
 - Which formats the user already knows how to export
 - What remains unknown
@@ -82,4 +83,4 @@ Ask whether the user already has a category list or budget only as an optional f
 
 After confirmation, save the profile outside the skill folder, generate the first period's checklist from it, and continue to Phase 1. If the user is not ready to collect files, stop after giving a personalized preparation list; first launch is still complete if the source map is confirmed.
 
-At each later cycle, ask `这期有没有新增或停用的账户？` before relying on the saved profile.
+At each later run confirm dates/event and changed sources. Old default_cycle values are preferences only, never a restriction; migrate them to an optional review_cadence. Partial inputs are valid with explicit coverage gaps. Never infer zero activity from missing files.

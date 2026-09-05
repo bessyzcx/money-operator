@@ -1,6 +1,8 @@
 # Financial Operating Review
 
-Use this reference only after the transaction ledger is reconciled. The objective is to connect the user's three financial views to goals and the next two months of resource allocation.
+Apply `period-scope.md` first. Monthly averages, monthly drivers, budgets and recurring baselines below apply only when source coverage and purpose support them. Otherwise use selected-period totals and event or daily/weekly views; do not manufacture monthly inputs. Use `runtime.md` for calculation, persistence and output fallbacks; no hosted site is required.
+
+Use this reference only after the transaction ledger is reconciled. The objective is to connect the user's three financial views to goals and the user-selected action horizon.
 
 ## Contents
 
@@ -53,7 +55,7 @@ Show actual cash inflows and outflows, including debt service, internal transfer
 
 ### Asset and liability snapshot
 
-Use one stated snapshot date, ideally the last day of the two-month period.
+Use one stated snapshot date, ideally the end of the selected interval, retaining actual evidence dates.
 
 - Include current assets at a supported value.
 - Include liabilities at outstanding principal plus accrued amounts already owed.
@@ -100,7 +102,7 @@ Inspect the anonymous schema with `--example`. Set every asset inclusion flag an
 = 净可用流动资金 ÷ 月度支出基线
 ```
 
-Prefer a trailing six-month spending baseline. If only two months exist, label it `临时估算` and list annual or irregular costs not captured.
+Prefer a trailing six-month spending baseline. If only short, partial, or event-only coverage exists, label it `临时估算` and list annual or irregular costs not captured.
 
 When classifications support it, show both:
 
@@ -299,7 +301,7 @@ In the final private report site, show in this order:
 5. Goal progress and asset roles
 6. Resilience, solvency, concentration, and wealth progress
 7. Changes since the prior snapshot
-8. The next two months' one to three actions
+8. One to three actions with user-appropriate timing
 9. Consumption decision bands and threshold-habit review when supported
 10. Assumptions, missing data, formulas, and risk notice
 
@@ -307,13 +309,13 @@ Use traffic lights only when the condition is transparent. Do not assign an opaq
 
 ## 9. Common errors
 
-- Mixing a two-month cash-flow period with an undated asset balance.
+- Mixing a selected cash-flow period with an undated asset balance.
 - Treating remaining principal plus all future interest as current liabilities.
 - Counting mortgage principal as both consumption and net-worth loss.
 - Counting credit-card purchase and repayment as two expenses.
 - Treating gross income minus spending as savings.
 - Treating credit limits, locked funds, or high-volatility assets as emergency cash.
-- Annualizing an abnormal two-month period without adjustment.
+- Annualizing an abnormal or event-only period without adjustment.
 - Using a stale property estimate as a current fact.
 - Counting owner-occupied property in freedom capital without a monetization plan.
 - Assuming many accounts means diversified underlying risk.
